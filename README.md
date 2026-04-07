@@ -1,6 +1,6 @@
 # 🧠 ABSA-Based Recommendation System
 
-基于**方面级情感分析（Aspect-Based Sentiment Analysis, ABSA）**的商品推荐优化系统。
+基于 **方面级情感分析（Aspect-Based Sentiment Analysis, ABSA）** 的商品推荐优化系统。
 
 本项目通过对用户评论进行方面级情感分析，构建商品情感特征，并将其融合到推荐模型中，实现推荐结果的优化与重排。
 
@@ -81,10 +81,11 @@ SKU级特征聚合
 ---
 
 ### 2️⃣ 情感数值化
+```
 Positive → score = confidence
 Negative → score = 1 - confidence
 Neutral → score = 0.5
-
+```
 ---
 
 ### 3️⃣ SKU级特征构建
@@ -100,16 +101,15 @@ Neutral → score = 0.5
 ---
 
 ### 4️⃣ 推荐融合（核心创新）
-
+```
 采用排序融合方法：
 rank_score =
-0.55 * rank_base
-
-0.20 * rank_sentiment
-0.20 * rank_negative
-0.05 * rank_confidence
-recommend_index_v2 = -rank_score
-
+0.55 * rank_base 
+0.20 * rank_sentiment 
+0.20 * rank_negative 
+0.05 * rank_confidence 
+recommend_index_v2 = -rank_score 
+```
 ---
 
 ## 📊 实验结果
@@ -136,12 +136,13 @@ recommend_index_v2 = -rank_score
 ---
 
 ## 🧪 实验流程（可复现）
+```
 python scripts/v2_absa/run_absa_full.py
 python scripts/v2_absa/parse_absa_full.py
 python scripts/v2_absa/aggregate_absa_full.py
 python scripts/v2_absa/build_recommend_v2.py
 python scripts/v2_absa/compare_v1_v2.py
-
+```
 ---
 
 ## 🛠️ 环境依赖
