@@ -9,11 +9,10 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
-from config import RAW_COMMENTS_FILE, ABSA_SMALL_RESULTS_FILE, ensure_dirs
+from config import RAW_COMMENTS_FILE, ABSA_SMALL_RESULTS_FILE, ensure_dirs, HF_CACHE_DIR
 
-# 一定要放在 import pyabsa 之前
-os.environ["HF_HOME"] = r"F:\hf_cache"
-os.environ["HF_HUB_CACHE"] = r"F:\hf_cache\hub"
+os.environ["HF_HOME"] = str(HF_CACHE_DIR)
+os.environ["HF_HUB_CACHE"] = str(HF_CACHE_DIR / "hub")
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
 from pyabsa import AspectPolarityClassification as APC

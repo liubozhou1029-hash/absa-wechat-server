@@ -1,0 +1,104 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+  padding: 32rpx 24rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.hero-section {
+  padding: 40rpx 12rpx 36rpx;
+}
+
+.hero-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #1f2a37;
+  line-height: 1.4;
+}
+
+.hero-subtitle {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  color: #6b7280;
+  line-height: 1.8;
+}
+
+.panel-section {
+  margin-top: 6rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1f2a37;
+  margin-bottom: 20rpx;
+  padding-left: 4rpx;
+}
+
+.entry-card {
+  background: #ffffff;
+  border-radius: 26rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 12rpx 32rpx rgba(31, 42, 55, 0.07);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.entry-left {
+  width: 86%;
+}
+
+.entry-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1f2a37;
+  line-height: 1.5;
+}
+
+.entry-desc {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+  line-height: 1.8;
+}
+
+.entry-right {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.data-card {
+  border-left: 10rpx solid #3b82f6;
+}
+
+.emotion-card {
+  border-left: 10rpx solid #16a34a;
+}
+
+.topic-card {
+  border-left: 10rpx solid #7c3aed;
+}
+
+.info-card {
+  margin-top: 12rpx;
+  background: #ffffff;
+  border-radius: 26rpx;
+  padding: 26rpx 24rpx;
+  box-shadow: 0 12rpx 32rpx rgba(31, 42, 55, 0.07);
+}
+
+.info-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1f2a37;
+  margin-bottom: 14rpx;
+}
+
+.info-text {
+  font-size: 24rpx;
+  color: #6b7280;
+  line-height: 1.9;
+}

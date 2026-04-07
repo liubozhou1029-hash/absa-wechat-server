@@ -1,0 +1,67 @@
+<view class="page">
+  <view class="page-header">
+    <view class="title">手机推荐结果</view>
+    <view class="subtitle">展示新版推荐指数与情感分析结果</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+
+  <view wx:else class="list">
+    <view
+      class="card"
+      wx:for="{{list}}"
+      wx:key="sku_id"
+      data-sku="{{item.sku_id}}"
+      bindtap="goDetail"
+    >
+      <view class="card-top">
+        <view class="name">{{item.display_name_text}}</view>
+        <view class="rank-badge">#{{index + 1}}</view>
+      </view>
+
+      <view class="sku">SKU：{{item.sku_id}}</view>
+
+      <view class="score-row">
+        <view class="score-box primary">
+          <view class="score-label">新版推荐指数</view>
+          <view class="score-value">{{item.recommend_index_v2_text}}</view>
+        </view>
+        <view class="score-box secondary">
+          <view class="score-label">旧版情感指数</view>
+          <view class="score-value">{{item.sentiment_index_text}}</view>
+        </view>
+      </view>
+
+      <view class="metric-row">
+        <view class="metric-item">
+          <text class="metric-label">ABSA情感均值</text>
+          <text class="metric-value">{{item.aspect_sentiment_mean_text}}</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-label">正向评论占比</text>
+          <text class="metric-value">{{item.aspect_positive_ratio_text}}%</text>
+        </view>
+      </view>
+
+      <view class="metric-row">
+        <view class="metric-item">
+          <text class="metric-label">平均情感值</text>
+          <text class="metric-value">{{item.avg_sentiment_text}}</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-label">有效评论数</text>
+          <text class="metric-value">{{item.effective_comments_text}}</text>
+        </view>
+      </view>
+
+      <view class="metric-row">
+        <view class="metric-item">
+          <text class="metric-label">有效评论比例</text>
+          <text class="metric-value">{{item.effective_ratio_text}}%</text>
+        </view>
+      </view>
+
+      <view class="tap-tip">点击查看详情 ></view>
+    </view>
+  </view>
+</view>

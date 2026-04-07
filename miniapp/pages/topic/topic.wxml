@@ -1,0 +1,55 @@
+<view class="page">
+  <view class="top-area">
+    <view class="page-title">主题关键词</view>
+    <view class="page-desc">评论文本的主题聚合与关键词统计信息</view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="state-card">
+      <view class="state-text">数据加载中...</view>
+    </view>
+  </block>
+
+  <block wx:elif="{{list.length === 0}}">
+    <view class="state-card">
+      <view class="state-text">暂无可展示的数据</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view
+      class="topic-card"
+      wx:for="{{list}}"
+      wx:key="sku_id"
+      bindtap="goDetail"
+      data-sku="{{item.sku_id}}"
+    >
+      <view class="card-header">
+        <view>
+          <view class="card-title">{{item.display_name_text}}</view>
+          <view class="card-tag">主题分析</view>
+        </view>
+
+        <view class="topic-box">
+          <view class="topic-box-label">主题集中度</view>
+          <view class="topic-box-value">{{item.topic_top1_ratio_text}}%</view>
+        </view>
+      </view>
+
+      <view class="middle-box">
+        <view class="topic-count-line">
+          <view class="topic-count-label">主题数量</view>
+          <view class="topic-count-value">{{item.topic_count}}</view>
+        </view>
+
+        <view class="keyword-label">核心关键词</view>
+        <view class="keyword-content">{{item.topic_keywords}}</view>
+      </view>
+
+      <view class="card-footer">
+        <view class="footer-text">查看完整主题详情</view>
+        <view class="footer-arrow">></view>
+      </view>
+    </view>
+  </block>
+</view>

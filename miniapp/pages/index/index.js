@@ -1,0 +1,19 @@
+Page({
+  goData() {
+    wx.navigateTo({
+      url: '/pages/phones/phones'
+    });
+  },
+
+  goEmotion() {
+    wx.navigateTo({
+      url: '/pages/sentiment/sentiment'
+    });
+  },
+
+  goTopic() {
+    wx.navigateTo({
+      url: '/pages/topic/topic'
+    });
+  }
+});

@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/phones/phones",
+    "pages/sentiment/sentiment",
+    "pages/topic/topic",
+    "pages/detail/detail",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "navigationBarTitleText": "评论数据分析工具",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f5f5"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

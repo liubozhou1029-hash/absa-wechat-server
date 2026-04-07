@@ -1,0 +1,158 @@
+.page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.page-header {
+  background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+  border-radius: 28rpx;
+  padding: 32rpx 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 10rpx 30rpx rgba(31, 45, 61, 0.06);
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #1f2d3d;
+  line-height: 1.45;
+}
+
+.subtitle {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #7a8599;
+}
+
+.section {
+  margin-bottom: 22rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 28rpx 24rpx;
+  box-shadow: 0 12rpx 28rpx rgba(31, 45, 61, 0.06);
+  border: 1rpx solid #edf1f7;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f2d3d;
+  margin-bottom: 22rpx;
+}
+
+.score-row {
+  display: flex;
+  gap: 16rpx;
+}
+
+.score-box {
+  flex: 1;
+  border-radius: 22rpx;
+  padding: 24rpx 18rpx;
+  text-align: center;
+}
+
+.score-box.primary {
+  background: linear-gradient(135deg, #edf4ff 0%, #f5f9ff 100%);
+}
+
+.score-box.secondary {
+  background: linear-gradient(135deg, #f7f8fb 0%, #fbfcfe 100%);
+}
+
+.score-label {
+  font-size: 22rpx;
+  color: #7a8599;
+}
+
+.score-value {
+  margin-top: 12rpx;
+  font-size: 46rpx;
+  font-weight: 800;
+  color: #2f6bff;
+  line-height: 1;
+}
+
+.compare-tip {
+  margin-top: 18rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 18rpx;
+  background: #f8fafd;
+  color: #6c778a;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f0f3f8;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: #7a8599;
+  font-size: 27rpx;
+  line-height: 1.5;
+}
+
+.value {
+  color: #1f2d3d;
+  font-size: 28rpx;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+
+.topic-card {
+  background: #f8fafd;
+  border-radius: 20rpx;
+  padding: 20rpx;
+}
+
+.topic-card + .topic-card {
+  margin-top: 16rpx;
+}
+
+.topic-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.topic-id {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #3b6ff5;
+}
+
+.topic-ratio {
+  font-size: 24rpx;
+  color: #7a8599;
+}
+
+.topic-keywords {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #1f2d3d;
+  line-height: 1.7;
+}
+
+.empty {
+  text-align: center;
+  color: #8a94a6;
+  font-size: 28rpx;
+  padding: 100rpx 0;
+}

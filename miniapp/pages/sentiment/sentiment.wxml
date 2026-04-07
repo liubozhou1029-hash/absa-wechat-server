@@ -1,0 +1,60 @@
+<view class="page">
+  <view class="page-header">
+    <view class="title">情感统计</view>
+    <view class="subtitle">评论文本情感指标与正负向比例分析</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+
+  <view wx:else class="list">
+    <view
+      class="card"
+      wx:for="{{list}}"
+      wx:key="sku_id"
+      data-sku="{{item.sku_id}}"
+      bindtap="goDetail"
+    >
+      <view class="card-top">
+        <view class="name">{{item.display_name_text}}</view>
+        <view class="score-tag">{{item.recommend_index_v2_text}}</view>
+      </view>
+
+      <view class="tag-line">新版推荐指数</view>
+
+      <view class="metric-row">
+        <view class="metric-item">
+          <text class="metric-label">旧版情感指数</text>
+          <text class="metric-value">{{item.sentiment_index_text}}</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-label">平均情感值</text>
+          <text class="metric-value">{{item.avg_sentiment_text}}</text>
+        </view>
+      </view>
+
+      <view class="metric-row">
+        <view class="metric-item">
+          <text class="metric-label">正向文本比例</text>
+          <text class="metric-value positive">{{item.pos_ratio_text}}%</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-label">负向文本比例</text>
+          <text class="metric-value negative">{{item.neg_ratio_text}}%</text>
+        </view>
+      </view>
+
+      <view class="metric-row">
+        <view class="metric-item">
+          <text class="metric-label">ABSA情感均值</text>
+          <text class="metric-value">{{item.aspect_sentiment_mean_text}}</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-label">ABSA正向占比</text>
+          <text class="metric-value positive">{{item.aspect_positive_ratio_text}}%</text>
+        </view>
+      </view>
+
+      <view class="tap-tip">查看完整分析详情 ></view>
+    </view>
+  </view>
+</view>

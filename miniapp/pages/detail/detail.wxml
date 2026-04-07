@@ -1,0 +1,111 @@
+<view class="page" wx:if="{{detail}}">
+  <view class="page-header">
+    <view class="title">{{detail.display_name_text}}</view>
+    <view class="subtitle">SKU：{{detail.sku_id}}</view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">核心评分</view>
+
+    <view class="score-row">
+      <view class="score-box primary">
+        <view class="score-label">新版推荐指数</view>
+        <view class="score-value">{{detail.recommend_index_v2_text}}</view>
+      </view>
+      <view class="score-box secondary">
+        <view class="score-label">旧版情感指数</view>
+        <view class="score-value">{{detail.sentiment_index_text}}</view>
+      </view>
+    </view>
+
+    <view class="compare-tip">
+      模型升级对比：新版指数融合了 ABSA 情感特征
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">综合统计指标</view>
+
+    <view class="info-row">
+      <text class="label">平均情感值</text>
+      <text class="value">{{detail.avg_sentiment_text}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">正向评论比例</text>
+      <text class="value">{{detail.pos_ratio_text}}%</text>
+    </view>
+    <view class="info-row">
+      <text class="label">负向评论比例</text>
+      <text class="value">{{detail.neg_ratio_text}}%</text>
+    </view>
+    <view class="info-row">
+      <text class="label">有效评论比例</text>
+      <text class="value">{{detail.effective_ratio_text}}%</text>
+    </view>
+    <view class="info-row">
+      <text class="label">有效评论数</text>
+      <text class="value">{{detail.effective_comments_text}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">主题集中度</text>
+      <text class="value">{{detail.topic_top1_ratio_text}}%</text>
+    </view>
+    <view class="info-row">
+      <text class="label">评分归一化</text>
+      <text class="value">{{detail.avg_rating_norm_text}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">评论量因子</text>
+      <text class="value">{{detail.volume_factor_text}}</text>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">ABSA 情感分析结果</view>
+
+    <view class="info-row">
+      <text class="label">ABSA评论数</text>
+      <text class="value">{{detail.absa_comment_count_text}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">ABSA情感均值</text>
+      <text class="value">{{detail.aspect_sentiment_mean_text}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">正向占比</text>
+      <text class="value">{{detail.aspect_positive_ratio_text}}%</text>
+    </view>
+    <view class="info-row">
+      <text class="label">负向占比</text>
+      <text class="value">{{detail.aspect_negative_ratio_text}}%</text>
+    </view>
+    <view class="info-row">
+      <text class="label">中性占比</text>
+      <text class="value">{{detail.aspect_neutral_ratio_text}}%</text>
+    </view>
+    <view class="info-row">
+      <text class="label">平均置信度</text>
+      <text class="value">{{detail.absa_confidence_mean_text}}</text>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">主题关键词分析</view>
+
+    <view wx:if="{{topics.length === 0}}" class="empty">暂无主题数据</view>
+
+    <view wx:else>
+      <view class="topic-card" wx:for="{{topics}}" wx:key="topic_id">
+        <view class="topic-top">
+          <text class="topic-id">主题 {{item.topic_id}}</text>
+          <text class="topic-ratio">占比 {{item.ratio}}</text>
+        </view>
+        <view class="topic-keywords">{{item.keywords}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view wx:else class="page">
+  <view class="empty">未找到详情数据</view>
+</view>

@@ -15,11 +15,11 @@ from config import (
     ABSA_FULL_RESULTS_FILE,
     ABSA_FULL_RESULTS_PARTIAL_FILE,
     ensure_dirs,
+    HF_CACHE_DIR,
 )
 
-# 一定要放在 import pyabsa 之前
-os.environ["HF_HOME"] = r"F:\hf_cache"
-os.environ["HF_HUB_CACHE"] = r"F:\hf_cache\hub"
+os.environ["HF_HOME"] = str(HF_CACHE_DIR)
+os.environ["HF_HUB_CACHE"] = str(HF_CACHE_DIR / "hub")
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
 warnings.filterwarnings("ignore")

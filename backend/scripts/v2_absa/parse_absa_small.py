@@ -119,9 +119,8 @@ def main():
               else ("Neutral" if pd.notna(x) and x == 0 else "Unknown"))
     )
 
-    df.to_csv(ABSA_FULL_PARSED_FILE, index=False, encoding="utf-8-sig")
-
-    print(f"6) 已导出 {ABSA_FULL_PARSED_FILE}")
+    df.to_csv(ABSA_SMALL_PARSED_FILE, index=False, encoding="utf-8-sig")
+    print(f"6) 已导出 {ABSA_SMALL_PARSED_FILE}")
     print("\n前5行预览：")
     print(df[[
         "sku_id", "item_name", "text",
