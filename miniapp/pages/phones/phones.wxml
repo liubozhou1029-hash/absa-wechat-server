@@ -1,67 +1,57 @@
 <view class="page">
   <view class="page-header">
-    <view class="title">手机推荐结果</view>
-    <view class="subtitle">展示新版推荐指数与情感分析结果</view>
+    <view class="page-title">商品推荐列表</view>
+    <view class="page-subtitle">融合整体情感与方面级情感分析结果</view>
   </view>
 
-  <view wx:if="{{loading}}" class="loading">加载中...</view>
-
-  <view wx:else class="list">
-    <view
-      class="card"
-      wx:for="{{list}}"
-      wx:key="sku_id"
-      data-sku="{{item.sku_id}}"
-      bindtap="goDetail"
-    >
-      <view class="card-top">
-        <view class="name">{{item.display_name_text}}</view>
-        <view class="rank-badge">#{{index + 1}}</view>
-      </view>
-
-      <view class="sku">SKU：{{item.sku_id}}</view>
-
-      <view class="score-row">
-        <view class="score-box primary">
-          <view class="score-label">新版推荐指数</view>
-          <view class="score-value">{{item.recommend_index_v2_text}}</view>
-        </view>
-        <view class="score-box secondary">
-          <view class="score-label">旧版情感指数</view>
-          <view class="score-value">{{item.sentiment_index_text}}</view>
-        </view>
-      </view>
-
-      <view class="metric-row">
-        <view class="metric-item">
-          <text class="metric-label">ABSA情感均值</text>
-          <text class="metric-value">{{item.aspect_sentiment_mean_text}}</text>
-        </view>
-        <view class="metric-item">
-          <text class="metric-label">正向评论占比</text>
-          <text class="metric-value">{{item.aspect_positive_ratio_text}}%</text>
-        </view>
-      </view>
-
-      <view class="metric-row">
-        <view class="metric-item">
-          <text class="metric-label">平均情感值</text>
-          <text class="metric-value">{{item.avg_sentiment_text}}</text>
-        </view>
-        <view class="metric-item">
-          <text class="metric-label">有效评论数</text>
-          <text class="metric-value">{{item.effective_comments_text}}</text>
-        </view>
-      </view>
-
-      <view class="metric-row">
-        <view class="metric-item">
-          <text class="metric-label">有效评论比例</text>
-          <text class="metric-value">{{item.effective_ratio_text}}%</text>
-        </view>
-      </view>
-
-      <view class="tap-tip">点击查看详情 ></view>
-    </view>
+  <view wx:if="{{loading}}" class="loading-box">
+    <text class="loading-text">数据加载中...</text>
   </view>
+
+  <block wx:else>
+    <block wx:for="{{list}}" wx:key="sku_id">
+      <view class="phone-card" bindtap="goDetail" data-sku="{{item.sku_id}}">
+
+        <!-- 顶部：商品名 + 分数 -->
+        <view class="card-top">
+          <view class="name-block">
+            <view class="name">{{item.display_name_text}}</view>
+            <view class="sub-id">SKU: {{item.sku_id}}</view>
+          </view>
+          <view class="score-block">
+            <view class="score-label">推荐分</view>
+            <view class="score-value">{{item.score_text}}</view>
+          </view>
+        </view>
+
+        <!-- 指标网格 -->
+        <view class="metrics-grid">
+          <view class="metric-item">
+            <view class="metric-label">整体情感均值</view>
+            <view class="metric-value">{{item.avg_sentiment_text}}</view>
+          </view>
+          <view class="metric-item" wx:if="{{item.has_absa}}">
+            <view class="metric-label">方面情感均值</view>
+            <view class="metric-value highlight">{{item.aspect_sentiment_mean_text}}</view>
+          </view>
+          <view class="metric-item" wx:if="{{item.has_absa}}">
+            <view class="metric-label">方面正向比例</view>
+            <view class="metric-value">{{item.aspect_positive_ratio_text}}%</view>
+          </view>
+          <view class="metric-item" wx:if="{{item.has_absa}}">
+            <view class="metric-label">ABSA 评论数</view>
+            <view class="metric-value">{{item.absa_comment_count_text}}</view>
+          </view>
+        </view>
+
+        <!-- 底部：有效评论 -->
+        <view class="bottom-row">
+          <text>有效评论：{{item.effective_comments_text}}</text>
+          <text>有效率：{{item.effective_ratio_text}}%</text>
+        </view>
+
+        <view class="go-detail">点击查看详情 ›</view>
+      </view>
+    </block>
+  </block>
 </view>

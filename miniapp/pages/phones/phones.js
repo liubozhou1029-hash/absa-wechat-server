@@ -7,34 +7,22 @@ function formatPercent(value) {
   return (num * 100).toFixed(1);
 }
 
-function formatNumber(value, digits) {
-  if (digits === undefined) digits = 4;
+function formatNumber(value, digits = 2) {
   if (value === undefined || value === null || value === '') return '--';
   const num = Number(value);
   if (Number.isNaN(num)) return '--';
   return num.toFixed(digits);
 }
 
-function safeText(value, fallback) {
-  if (fallback === undefined) fallback = '--';
-  if (value === undefined || value === null || value === '') return fallback;
-  return String(value);
-}
-
-function safeInt(value, fallback) {
-  if (fallback === undefined) fallback = 0;
+function safeInt(value, fallback = 0) {
   const num = Number(value);
   if (Number.isNaN(num)) return fallback;
   return Math.round(num);
 }
 
 function pickDisplayName(item) {
-  if (item.display_name !== undefined && item.display_name !== null && item.display_name !== '') {
-    return String(item.display_name);
-  }
-  if (item.original_name !== undefined && item.original_name !== null && item.original_name !== '') {
-    return String(item.original_name);
-  }
+  if (item.display_name) return String(item.display_name);
+  if (item.original_name) return String(item.original_name);
   return '未命名商品';
 }
 
@@ -46,30 +34,31 @@ Page({
 
   onLoad() {
     const list = phonesData.map((item) => {
-      return Object.assign({}, item, {
+      return {
+        ...item,
         display_name_text: pickDisplayName(item),
-        recommend_index_v2_text: formatNumber(item.recommend_index_v2, 2),
-        sentiment_index_text: formatNumber(item.sentiment_index, 2),
+        score_text: formatNumber(item.recommend_score, 2),
+
+        // 辅助指标
+        avg_sentiment_text:         formatNumber(item.avg_sentiment, 4),
         aspect_sentiment_mean_text: formatNumber(item.aspect_sentiment_mean, 4),
-        avg_sentiment_text: formatNumber(item.avg_sentiment, 4),
         aspect_positive_ratio_text: formatPercent(item.aspect_positive_ratio),
-        effective_ratio_text: formatPercent(item.effective_ratio),
-        effective_comments_text: safeInt(item.effective_comments, 0)
-      });
+        aspect_negative_ratio_text: formatPercent(item.aspect_negative_ratio),
+        effective_ratio_text:       formatPercent(item.effective_ratio),
+        effective_comments_text:    safeInt(item.effective_comments, 0),
+        total_comments_text:        safeInt(item.total_comments, 0),
+        absa_comment_count_text:    safeInt(item.absa_comment_count, 0),
+      };
     });
 
+    // 按推荐分降序（数据已排好序，前端保持一致）
     list.sort((a, b) => {
-      const va = Number(a.recommend_index_v2);
-      const vb = Number(b.recommend_index_v2);
-      const na = Number.isNaN(va) ? 0 : va;
-      const nb = Number.isNaN(vb) ? 0 : vb;
-      return nb - na;
+      const va = Number(a.recommend_score);
+      const vb = Number(b.recommend_score);
+      return (Number.isNaN(vb) ? -999999 : vb) - (Number.isNaN(va) ? -999999 : va);
     });
 
-    this.setData({
-      list: list,
-      loading: false
-    });
+    this.setData({ list, loading: false });
   },
 
   goDetail(e) {

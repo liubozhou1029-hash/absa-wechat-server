@@ -14,47 +14,55 @@
       data-sku="{{item.sku_id}}"
       bindtap="goDetail"
     >
+      <!-- 顶部：商品名 + 推荐分角标 -->
       <view class="card-top">
         <view class="name">{{item.display_name_text}}</view>
-        <view class="score-tag">{{item.recommend_index_v2_text}}</view>
-      </view>
-
-      <view class="tag-line">新版推荐指数</view>
-
-      <view class="metric-row">
-        <view class="metric-item">
-          <text class="metric-label">旧版情感指数</text>
-          <text class="metric-value">{{item.sentiment_index_text}}</text>
-        </view>
-        <view class="metric-item">
-          <text class="metric-label">平均情感值</text>
-          <text class="metric-value">{{item.avg_sentiment_text}}</text>
+        <view class="score-badge">
+          <text class="badge-num">{{item.recommend_score_text}}</text>
+          <text class="badge-label">推荐分</text>
         </view>
       </view>
 
-      <view class="metric-row">
-        <view class="metric-item">
-          <text class="metric-label">正向文本比例</text>
-          <text class="metric-value positive">{{item.pos_ratio_text}}%</text>
+      <!-- 情感分布可视化条 -->
+      <view class="dist-section">
+        <view class="dist-bar">
+          <view class="seg seg-pos" style="width:{{item.pos_bar_width}}%"></view>
+          <view class="seg seg-neu" style="width:{{item.neu_bar_width}}%"></view>
+          <view class="seg seg-neg" style="width:{{item.neg_bar_width}}%"></view>
         </view>
-        <view class="metric-item">
-          <text class="metric-label">负向文本比例</text>
-          <text class="metric-value negative">{{item.neg_ratio_text}}%</text>
-        </view>
-      </view>
-
-      <view class="metric-row">
-        <view class="metric-item">
-          <text class="metric-label">ABSA情感均值</text>
-          <text class="metric-value">{{item.aspect_sentiment_mean_text}}</text>
-        </view>
-        <view class="metric-item">
-          <text class="metric-label">ABSA正向占比</text>
-          <text class="metric-value positive">{{item.aspect_positive_ratio_text}}%</text>
+        <view class="dist-legend">
+          <view class="leg-item">
+            <view class="dot dot-pos"></view>
+            <text>正向 {{item.pos_ratio_text}}%</text>
+          </view>
+          <view class="leg-item">
+            <view class="dot dot-neg"></view>
+            <text>负向 {{item.neg_ratio_text}}%</text>
+          </view>
         </view>
       </view>
 
-      <view class="tap-tip">查看完整分析详情 ></view>
+      <!-- 关键指标网格 -->
+      <view class="metrics-grid">
+        <view class="metric-cell">
+          <text class="cell-label">情感指数</text>
+          <text class="cell-value">{{item.avg_sentiment_score_text}}</text>
+        </view>
+        <view class="metric-cell" wx:if="{{item.has_absa}}">
+          <text class="cell-label">方面情感均值</text>
+          <text class="cell-value absa">{{item.aspect_sentiment_mean_text}}</text>
+        </view>
+        <view class="metric-cell" wx:if="{{item.has_absa}}">
+          <text class="cell-label">ABSA 正向</text>
+          <text class="cell-value pos">{{item.aspect_positive_ratio_text}}%</text>
+        </view>
+        <view class="metric-cell" wx:if="{{item.has_absa}}">
+          <text class="cell-label">ABSA 负向</text>
+          <text class="cell-value neg">{{item.aspect_negative_ratio_text}}%</text>
+        </view>
+      </view>
+
+      <view class="tap-tip">查看完整分析详情 ›</view>
     </view>
   </view>
 </view>
