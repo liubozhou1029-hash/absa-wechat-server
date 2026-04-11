@@ -75,3 +75,12 @@ build/
 
 # Jupyter（如果以后用）
 .ipynb_checkpoints/
+backend/scripts/v2_absa/checkpoints/
+
+hf_cache/
+
+*.state_dict
+
+*.bin
+
+*.safetensors
