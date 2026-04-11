@@ -48,7 +48,6 @@ backend/checkpoints/
 # =========================
 # 后端中间数据（按目录忽略，不要全局忽略所有csv/json）
 # =========================
-backend/data/processed/
 backend/data/temp/
 backend/data/intermediate/
 backend/outputs/
