@@ -83,3 +83,8 @@ hf_cache/
 *.bin
 
 *.safetensors
+
+backend/scripts/app/checkpoints/
+*.args.txt
+*.config
+*.tokenizer
