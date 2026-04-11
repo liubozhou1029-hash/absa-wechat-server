@@ -1,0 +1,149 @@
+<!-- pages/recommend/recommend.wxml -->
+<view class="container">
+
+  <!-- ── 顶部标题 ── -->
+  <view class="header">
+    <text class="title">智能商品推荐</text>
+    <text class="subtitle">输入您的评论，获取个性化推荐</text>
+  </view>
+
+  <!-- ── 输入区 ── -->
+  <view class="input-card">
+    <view class="input-label">
+      <text class="label-text">输入您的评论</text>
+      <text class="label-hint">每行一条，建议3~10条</text>
+    </view>
+    <textarea
+      class="review-input"
+      placeholder="例如：这本书内容深刻，文笔流畅，价格实惠&#10;物流很快，包装完好，客服态度好&#10;..."
+      value="{{inputText}}"
+      bindinput="onInput"
+      maxlength="2000"
+      auto-height
+    />
+    <view class="input-footer">
+      <text class="char-count">{{inputText.length}} / 2000</text>
+      <view class="example-btn" bindtap="fillExample">填入示例</view>
+    </view>
+  </view>
+
+  <!-- ── 数量选择 ── -->
+  <view class="option-row">
+    <text class="option-label">推荐数量</text>
+    <view class="topk-btns">
+      <view
+        wx:for="{{topkOptions}}"
+        wx:key="*this"
+        class="topk-btn {{selectedTopK === item ? 'active' : ''}}"
+        data-val="{{item}}"
+        bindtap="selectTopK"
+      >{{item}}个</view>
+    </view>
+  </view>
+
+  <!-- ── 提交按钮 ── -->
+  <view class="submit-btn {{loading ? 'disabled' : ''}}" bindtap="submit">
+    <text wx:if="{{!loading}}">开始分析并推荐</text>
+    <view wx:else class="loading-row">
+      <view class="dot-loading">
+        <view class="dot"></view>
+        <view class="dot"></view>
+        <view class="dot"></view>
+      </view>
+      <text>{{loadingText}}</text>
+    </view>
+  </view>
+
+  <!-- ── 结果区 ── -->
+  <block wx:if="{{hasResult}}">
+
+    <!-- 用户偏好 -->
+    <view class="result-section">
+      <view class="section-title">
+        <text class="section-icon">📊</text>
+        <text>识别到的偏好</text>
+        <text wx:if="{{userCategory}}" class="cat-tag">推断品类：{{userCategory}}</text>
+      </view>
+      <view class="pref-list">
+        <view wx:for="{{preferences}}" wx:key="aspect" class="pref-item">
+          <text class="pref-aspect">{{item.aspect}}</text>
+          <view class="pref-bar-wrap">
+            <view
+              class="pref-bar {{item.positive ? 'pos' : 'neg'}}"
+              style="width: {{item.barWidth}}%"
+            ></view>
+          </view>
+          <text class="pref-score {{item.positive ? 'pos-text' : 'neg-text'}}">
+            {{item.positive ? '+' : ''}}{{item.score}}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 同品类推荐 -->
+    <view wx:if="{{sameCategory.list.length > 0}}" class="result-section">
+      <view class="section-title">
+        <text class="section-icon">🎯</text>
+        <text>同品类推荐（{{sameCategory.cat}}）</text>
+      </view>
+      <view class="reason-box">
+        <text class="reason-text">{{sameCategory.reason}}</text>
+      </view>
+      <view
+        wx:for="{{sameCategory.list}}"
+        wx:key="name"
+        class="rec-card"
+        data-item="{{item}}"
+        bindtap="goRecDetail"
+      >
+        <view class="rec-rank">{{index + 1}}</view>
+        <view class="rec-info">
+          <text class="rec-name">{{item.name}}</text>
+          <view class="rec-tags">
+            <text class="tag tag-cat">{{item.cat}}</text>
+            <text class="tag tag-pos">好评率 {{item.pos_ratio_text}}%</text>
+            <text class="tag tag-count">{{item.comment_count}}条评论</text>
+          </view>
+        </view>
+        <view class="rec-score">
+          <text class="score-num">{{item.score}}</text>
+          <text class="score-label">推荐分</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 跨品类推荐 -->
+    <view class="result-section">
+      <view class="section-title">
+        <text class="section-icon">🌐</text>
+        <text>跨品类推荐</text>
+      </view>
+      <view class="reason-box">
+        <text class="reason-text">{{crossCategory.reason}}</text>
+      </view>
+      <view
+        wx:for="{{crossCategory.list}}"
+        wx:key="name"
+        class="rec-card"
+        data-item="{{item}}"
+        bindtap="goRecDetail"
+      >
+        <view class="rec-rank">{{index + 1}}</view>
+        <view class="rec-info">
+          <text class="rec-name">{{item.name}}</text>
+          <view class="rec-tags">
+            <text class="tag tag-cat">{{item.cat}}</text>
+            <text class="tag tag-pos">好评率 {{item.pos_ratio_text}}%</text>
+            <text class="tag tag-count">{{item.comment_count}}条评论</text>
+          </view>
+        </view>
+        <view class="rec-score">
+          <text class="score-num">{{item.score}}</text>
+          <text class="score-label">推荐分</text>
+        </view>
+      </view>
+    </view>
+
+  </block>
+
+</view>

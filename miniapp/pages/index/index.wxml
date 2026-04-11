@@ -1,49 +1,55 @@
+<!-- pages/index/index.wxml -->
 <view class="page">
+
   <view class="hero-section">
-    <view class="hero-title">评论数据分析工具</view>
-    <view class="hero-subtitle">
-      基于评论文本的情感分析与主题关键词统计
-    </view>
+    <text class="hero-title">评论数据分析工具</text>
+    <text class="hero-subtitle">基于评论文本的情感分析与主题关键词统计</text>
   </view>
 
   <view class="panel-section">
-    <view class="section-title">功能入口</view>
+    <text class="section-title">功能入口</text>
 
+    <!-- 智能推荐（新增核心功能） -->
+    <view class="entry-card recommend-card" bindtap="goRecommend">
+      <view class="entry-left">
+        <text class="entry-title">🎯 智能推荐</text>
+        <text class="entry-desc">输入您的评论，获取个性化跨品类商品推荐</text>
+      </view>
+      <text class="entry-right">›</text>
+    </view>
+
+    <!-- 数据分析 -->
     <view class="entry-card data-card" bindtap="goData">
       <view class="entry-left">
-        <view class="entry-title">数据分析</view>
-        <view class="entry-desc">
-          查看评论文本的综合分析信息，包括情感指数、情感均值及有效文本统计。
-        </view>
+        <text class="entry-title">数据分析</text>
+        <text class="entry-desc">查看评论文本的综合分析信息，包括情感指数、情感均值及有效文本统计。</text>
       </view>
-      <view class="entry-right">></view>
+      <text class="entry-right">›</text>
     </view>
 
+    <!-- 情感统计 -->
     <view class="entry-card emotion-card" bindtap="goEmotion">
       <view class="entry-left">
-        <view class="entry-title">情感统计</view>
-        <view class="entry-desc">
-          查看评论文本的正向比例、负向比例及情感均值等情感分析指标。
-        </view>
+        <text class="entry-title">情感统计</text>
+        <text class="entry-desc">查看评论文本的正向比例、负向比例及情感均值等情感分析指标。</text>
       </view>
-      <view class="entry-right">></view>
+      <text class="entry-right">›</text>
     </view>
 
+    <!-- 主题关键词 -->
     <view class="entry-card topic-card" bindtap="goTopic">
       <view class="entry-left">
-        <view class="entry-title">主题关键词</view>
-        <view class="entry-desc">
-          查看评论文本聚类后的主题集中度与核心关键词信息。
-        </view>
+        <text class="entry-title">主题关键词</text>
+        <text class="entry-desc">查看评论文本本题类后的主题集中度与核心关键词信息。</text>
       </view>
-      <view class="entry-right">></view>
+      <text class="entry-right">›</text>
     </view>
+
   </view>
 
   <view class="info-card">
-    <view class="info-title">工具说明</view>
-    <view class="info-text">
-      本工具用于展示评论文本分析结果，主要包括情感分析、文本统计与主题关键词提取等内容，适用于数据分析学习与研究场景。
-    </view>
+    <text class="info-title">工具说明</text>
+    <text class="info-text">本工具用于展示评论文本分析结果，主要包括情感分析、文本统计与主题关键词提取等内容，适用于数据分析学习与研究场景。</text>
   </view>
+
 </view>

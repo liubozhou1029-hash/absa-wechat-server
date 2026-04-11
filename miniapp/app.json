@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/recommend/recommend",
     "pages/phones/phones",
     "pages/sentiment/sentiment",
     "pages/topic/topic",
