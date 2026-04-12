@@ -235,6 +235,21 @@ def recommend():
         if not reviews or len(reviews) == 0:
             return jsonify({"code": 400, "message": "请至少输入一条评论"}), 400
 
+            # 暂存用户提交数据
+            from datetime import datetime
+            log_entry = {
+                "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "reviews": reviews,
+                "user_category": detect_user_category(reviews),
+            }
+            log_file = BASE_DIR / "backend" / "data" / "user_submissions.json"
+            try:
+                existing = json.loads(log_file.read_text(encoding="utf-8")) if log_file.exists() else []
+                existing.append(log_entry)
+                log_file.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
+            except Exception:
+                pass
+
         # 提取用户偏好
         user_pref = extract_user_preference(reviews)
         user_cat  = detect_user_category(reviews)

@@ -60,33 +60,26 @@ Page({
       this.setData({ loadingText: steps[step] });
     }, 2000);
 
-    wx.request({
-      url: `${app.globalData.apiBase}/recommend`,
-      method: "POST",
-      header: { "Content-Type": "application/json" },
+    wx.cloud.callFunction({
+      name: 'recommend',
       data: { reviews, top_k: this.data.selectedTopK },
-      timeout: 120000, // ABSA推理较慢，2分钟超时
       success: (res) => {
         clearInterval(timer);
-        const data = res.data;
+        const data = res.result;
+        console.log('云函数返回：', JSON.stringify(res.result));
         if (data.code !== 200) {
           wx.showToast({ title: data.message || "推荐失败", icon: "none" });
           this.setData({ loading: false });
           return;
         }
-
-        // 处理偏好展示数据（加上进度条宽度）
         const preferences = (data.preferences || []).map(p => ({
           ...p,
           barWidth: Math.round(Math.abs(p.score) * 100),
         }));
-
-        // 处理推荐列表（加格式化字段）
         const formatList = (list) => list.map(item => ({
           ...item,
           pos_ratio_text: (item.positive_ratio * 100).toFixed(0),
         }));
-
         this.setData({
           loading: false,
           hasResult: true,
@@ -101,14 +94,12 @@ Page({
             list: formatList(data.cross_category.list || []),
           },
         });
-
-        // 滚动到结果区
         wx.pageScrollTo({ scrollTop: 600, duration: 300 });
       },
       fail: (err) => {
         clearInterval(timer);
-        console.error("请求失败", err);
-        wx.showToast({ title: "网络错误，请检查后端服务", icon: "none" });
+        console.error("云函数调用失败", err);
+        wx.showToast({ title: "调用失败，请重试", icon: "none" });
         this.setData({ loading: false });
       }
     });

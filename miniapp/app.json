@@ -8,6 +8,7 @@
     "pages/detail/detail",
     "pages/logs/logs"
   ],
+  "cloud": true,
   "window": {
     "navigationBarTitleText": "评论数据分析工具",
     "navigationBarBackgroundColor": "#ffffff",
