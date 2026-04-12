@@ -1,99 +1,65 @@
-const detailsData = require('../../utils/data/details');
+// pages/detail/detail.js
+const detailsData = require('../../utils/data/details_new');
 
-function formatPercent(value) {
-  if (value === undefined || value === null || value === '') return '--';
-  const num = Number(value);
-  if (Number.isNaN(num)) return '--';
-  return (num * 100).toFixed(1);
-}
-
-function formatNumber(value, digits = 4) {
-  if (value === undefined || value === null || value === '') return '--';
-  const num = Number(value);
-  if (Number.isNaN(num)) return '--';
-  return num.toFixed(digits);
-}
-
-function safeText(value, fallback = '--') {
-  if (value === undefined || value === null || value === '') return fallback;
-  return String(value);
-}
-
-function safeInt(value, fallback = 0) {
-  const num = Number(value);
-  if (Number.isNaN(num)) return fallback;
-  return Math.round(num);
+function fmt(v, d) {
+  if (v === undefined || v === null) return '--';
+  const n = Number(v);
+  if (isNaN(n)) return '--';
+  return n.toFixed(d === undefined ? 2 : d);
 }
 
 Page({
   data: {
-    sku_id: '',
     detail: null,
-    topics: [],
-    has_absa: false
+    aspects: [],
   },
 
   onLoad(options) {
-    const skuId = options.sku_id || '';
+    const skuId = decodeURIComponent(options.sku_id || '');
     const item = detailsData[skuId];
 
-    if (item) {
-      const detail = item.detail || {};
-      const topics = item.topics || [];
-      const has_absa = !!detail.has_absa;
-
-      const detailView = {
-        ...detail,
-
-        display_name_text: safeText(detail.display_name || detail.original_name, '未命名商品'),
-
-        // 核心推荐分（百分制）
-        recommend_score_text: formatNumber(detail.recommend_score, 2),
-        // V1 情感分（参考）
-        v1_score_text: formatNumber(detail.v1_score, 2),
-        // 分数来源标签
-        score_source: has_absa ? '整体情感 + ABSA 方面级融合' : '整体情感推荐指数',
-        // 情感统计卡片右上角角标：avg_sentiment × 100
-        avg_sentiment_score_text: formatNumber(
-          detail.avg_sentiment != null ? detail.avg_sentiment * 100 : null, 1
-        ),
-
-        // 整体情感统计
-        total_comments_text:     safeInt(detail.total_comments, 0),
-        effective_comments_text: safeInt(detail.effective_comments, 0),
-        avg_sentiment_text:      formatNumber(detail.avg_sentiment, 4),
-        std_sentiment_text:      formatNumber(detail.std_sentiment, 4),
-        effective_ratio_text:    formatPercent(detail.effective_ratio),
-        pos_ratio_text:          formatPercent(detail.pos_ratio),
-        neg_ratio_text:          formatPercent(detail.neg_ratio),
-        topic_top1_ratio_text:   formatPercent(detail.topic_top1_ratio),
-        avg_rating_norm_text:    formatNumber(detail.avg_rating_norm, 4),
-        volume_factor_text:      formatNumber(detail.volume_factor, 4),
-
-        // ABSA 方面级
-        absa_comment_count_text:        safeInt(detail.absa_comment_count, 0),
-        aspect_sentiment_mean_text:     formatNumber(detail.aspect_sentiment_mean, 4),
-        aspect_sentiment_abs_mean_text: formatNumber(detail.aspect_sentiment_abs_mean, 4),
-        aspect_positive_ratio_text:     formatPercent(detail.aspect_positive_ratio),
-        aspect_negative_ratio_text:     formatPercent(detail.aspect_negative_ratio),
-        aspect_neutral_ratio_text:      formatPercent(detail.aspect_neutral_ratio),
-        aspect_known_ratio_text:        formatPercent(detail.aspect_known_ratio),
-        absa_confidence_mean_text:      formatNumber(detail.absa_confidence_mean, 4),
-      };
-
-      const topicView = topics.map((topic) => ({
-        ...topic,
-        ratio_text: `${formatPercent(topic.ratio)}%`
-      }));
-
-      this.setData({
-        sku_id: skuId,
-        detail: detailView,
-        topics: topicView,
-        has_absa
-      });
-    } else {
-      wx.showToast({ title: '未找到详情数据', icon: 'none' });
+    if (!item) {
+      wx.showToast({ title: '未找到商品数据', icon: 'none' });
+      return;
     }
+
+    const d = item.detail;
+    const pos = Number(d.aspect_positive_ratio || 0) * 100;
+    const neg = Number(d.aspect_negative_ratio || 0) * 100;
+    const neu = Math.max(0, 100 - pos - neg);
+    const sent = Number(d.aspect_sentiment_mean || 0);
+
+    const detail = {
+      ...d,
+      score_text: fmt(d.recommend_score, 1),
+      sent_text:  fmt(d.aspect_sentiment_mean, 3),
+      sent_class: sent >= 0 ? 'pos-val' : 'neg-val',
+      abs_text:   fmt(d.aspect_sentiment_abs_mean, 3),
+      conf_text:  fmt(d.absa_confidence_mean, 3),
+      known_text: fmt(Number(d.aspect_known_ratio || 1) * 100, 1),
+      pos_bar:    pos.toFixed(1),
+      neg_bar:    neg.toFixed(1),
+      neu_bar:    neu.toFixed(1),
+      pos_text:   pos.toFixed(1),
+      neg_text:   neg.toFixed(1),
+      neu_text:   neu.toFixed(1),
+    };
+
+    // 方面数据处理
+    const aspects = (item.aspects || []).map(a => {
+      const s = Number(a.aspect_sentiment_mean || 0);
+      // 条形图宽度：将[-1,1]映射到[0,100]
+      const barW = Math.round((s + 1) / 2 * 100);
+      return {
+        ...a,
+        sent_text:  fmt(a.aspect_sentiment_mean, 3),
+        sent_class: s >= 0 ? 'pos-val' : 'neg-val',
+        bar_width:  barW,
+        pos_text:   fmt(Number(a.aspect_positive_ratio || 0) * 100, 1),
+        neg_text:   fmt(Number(a.aspect_negative_ratio || 0) * 100, 1),
+      };
+    });
+
+    this.setData({ detail, aspects });
   }
 });

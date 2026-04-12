@@ -4,6 +4,7 @@
     "pages/recommend/recommend",
     "pages/phones/phones",
     "pages/sentiment/sentiment",
+    "pages/sentiment_detail/sentiment_detail",
     "pages/topic/topic",
     "pages/detail/detail",
     "pages/logs/logs"

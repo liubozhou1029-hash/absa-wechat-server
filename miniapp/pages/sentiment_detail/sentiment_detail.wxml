@@ -1,0 +1,81 @@
+<!-- pages/sentiment_detail/sentiment_detail.wxml -->
+<view class="page">
+
+  <view class="header-card {{isGood ? 'good-header' : 'bad-header'}}">
+    <view class="cat-badge">{{detail.cat}}</view>
+    <text class="title">{{detail.sku_id}}</text>
+    <view class="score-row">
+      <view class="score-item">
+        <text class="score-big">{{isGood ? detail.pos_text : detail.neg_text}}%</text>
+        <text class="score-label">{{isGood ? '好评率' : '差评率'}}</text>
+      </view>
+      <view class="score-item">
+        <text class="score-big">{{detail.score_text}}</text>
+        <text class="score-label">推荐分</text>
+      </view>
+      <view class="score-item">
+        <text class="score-big">{{detail.absa_comment_count}}</text>
+        <text class="score-label">评论数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 整体情感分布 -->
+  <view class="card">
+    <text class="card-title">整体情感分布</text>
+    <view class="dist-bar">
+      <view class="seg seg-pos" style="width:{{detail.pos_bar+'%'}}"></view>
+      <view class="seg seg-neu" style="width:{{detail.neu_bar+'%'}}"></view>
+      <view class="seg seg-neg" style="width:{{detail.neg_bar+'%'}}"></view>
+    </view>
+    <view class="dist-numbers">
+      <view class="dn-item">
+        <text class="dn-val pos-text">{{detail.pos_text}}%</text>
+        <text class="dn-label">正向</text>
+      </view>
+      <view class="dn-item">
+        <text class="dn-val neu-text">{{detail.neu_text}}%</text>
+        <text class="dn-label">中性</text>
+      </view>
+      <view class="dn-item">
+        <text class="dn-val neg-text">{{detail.neg_text}}%</text>
+        <text class="dn-label">负向</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 方面情感详情 带数字说明 -->
+  <view class="card">
+    <text class="card-title">{{isGood ? '各方面好评排行' : '各方面差评排行'}}</text>
+    <text class="card-tip">数值越高代表该方面{{isGood ? '用户评价越正面' : '用户反映问题越多'}}</text>
+
+    <view wx:if="{{aspects.length === 0}}" class="empty">暂无方面数据</view>
+    <view wx:else>
+      <view wx:for="{{aspects}}" wx:key="aspect" class="aspect-row">
+        <!-- 方面名 + 评论数 -->
+        <view class="aspect-left">
+          <text class="aspect-name">{{item.aspect}}</text>
+          <text class="aspect-count">{{item.aspect_count}}条</text>
+        </view>
+        <!-- 进度条 + 数字 -->
+        <view class="aspect-bar-wrap">
+          <view class="aspect-bar">
+            <view
+              class="aspect-fill {{isGood ? 'good-fill' : 'bad-fill'}}"
+              style="width:{{isGood ? item.pos_pct : item.neg_pct}}%"
+            ></view>
+          </view>
+          <text class="aspect-pct {{isGood ? 'pos-text' : 'neg-text'}}">
+            {{isGood ? item.pos_pct : item.neg_pct}}%
+          </text>
+        </view>
+        <!-- 正/负向数量文字说明 -->
+        <view class="aspect-detail">
+          <text class="ad-good">👍{{item.pos_count}}条</text>
+          <text class="ad-bad">👎{{item.neg_count}}条</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

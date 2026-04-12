@@ -1,68 +1,103 @@
+<!-- pages/sentiment/sentiment.wxml -->
 <view class="page">
+
   <view class="page-header">
-    <view class="title">情感统计</view>
-    <view class="subtitle">评论文本情感指标与正负向比例分析</view>
+    <text class="page-title">情感统计</text>
+    <text class="page-subtitle">各品类好评与差评排行</text>
   </view>
 
-  <view wx:if="{{loading}}" class="loading">加载中...</view>
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === 'good' ? 'active good-active' : ''}}"
+      bindtap="switchTab" data-tab="good">👍 好评榜</view>
+    <view class="tab-item {{activeTab === 'bad' ? 'active bad-active' : ''}}"
+      bindtap="switchTab" data-tab="bad">👎 差评榜</view>
+  </view>
+
+  <scroll-view class="cat-filter" scroll-x>
+    <view
+      wx:for="{{catList}}" wx:key="*this"
+      class="cat-btn {{activeTab === 'good' ? 'good-btn' : 'bad-btn'}} {{selectedCat === item ? 'active' : ''}}"
+      data-cat="{{item}}" bindtap="scrollToCat"
+    >{{item}}</view>
+  </scroll-view>
+
+  <view wx:if="{{loading}}" class="loading-box"><text>加载中...</text></view>
 
   <view wx:else class="list">
-    <view
-      class="card"
-      wx:for="{{list}}"
-      wx:key="sku_id"
-      data-sku="{{item.sku_id}}"
-      bindtap="goDetail"
-    >
-      <!-- 顶部：商品名 + 推荐分角标 -->
-      <view class="card-top">
-        <view class="name">{{item.display_name_text}}</view>
-        <view class="score-badge">
-          <text class="badge-num">{{item.recommend_score_text}}</text>
-          <text class="badge-label">推荐分</text>
-        </view>
-      </view>
 
-      <!-- 情感分布可视化条 -->
-      <view class="dist-section">
-        <view class="dist-bar">
-          <view class="seg seg-pos" style="width:{{item.pos_bar_width}}%"></view>
-          <view class="seg seg-neu" style="width:{{item.neu_bar_width}}%"></view>
-          <view class="seg seg-neg" style="width:{{item.neg_bar_width}}%"></view>
+    <block wx:if="{{activeTab === 'good'}}">
+      <view wx:for="{{goodGroups}}" wx:key="cat" class="cat-section" id="good-{{item.catId}}">
+        <view class="cat-header">
+          <view class="cat-dot good-dot"></view>
+          <text class="cat-name">{{item.cat}}</text>
+          <text class="cat-count good-count">TOP{{item.list.length}}</text>
         </view>
-        <view class="dist-legend">
-          <view class="leg-item">
-            <view class="dot dot-pos"></view>
-            <text>正向 {{item.pos_ratio_text}}%</text>
+        <view wx:for="{{item.list}}" wx:for-item="prod" wx:for-index="pidx"
+          wx:key="sku_id" class="card"
+          data-sku="{{prod.sku_id}}" data-tab="good" bindtap="goDetail">
+          <view class="card-top">
+            <view class="rank-badge good-badge">{{pidx + 1}}</view>
+            <view class="name-wrap"><text class="name">{{prod.sku_id}}</text></view>
+            <view class="ratio-badge">
+              <text class="ratio-num good-num">{{prod.pos_text}}%</text>
+              <text class="ratio-label">好评率</text>
+            </view>
           </view>
-          <view class="leg-item">
-            <view class="dot dot-neg"></view>
-            <text>负向 {{item.neg_ratio_text}}%</text>
+          <view class="dist-bar">
+            <view class="seg seg-pos" style="width:{{prod.pos_bar+'%'}}"></view>
+            <view class="seg seg-neu" style="width:{{prod.neu_bar+'%'}}"></view>
+            <view class="seg seg-neg" style="width:{{prod.neg_bar+'%'}}"></view>
+          </view>
+          <view class="dist-numbers">
+            <text class="dn-pos">正向 {{prod.pos_text}}%</text>
+            <text class="dn-neu">中性 {{prod.neu_text}}%</text>
+            <text class="dn-neg">负向 {{prod.neg_text}}%</text>
+          </view>
+          <view class="meta-row">
+            <text class="meta-item">推荐分 {{prod.score_text}}</text>
+            <text class="meta-item">评论数 {{prod.absa_comment_count}}</text>
+            <text class="meta-item tap-tip">查看方面详情 ›</text>
           </view>
         </view>
       </view>
+    </block>
 
-      <!-- 关键指标网格 -->
-      <view class="metrics-grid">
-        <view class="metric-cell">
-          <text class="cell-label">情感指数</text>
-          <text class="cell-value">{{item.avg_sentiment_score_text}}</text>
+    <block wx:if="{{activeTab === 'bad'}}">
+      <view wx:for="{{badGroups}}" wx:key="cat" class="cat-section" id="bad-{{item.catId}}">
+        <view class="cat-header">
+          <view class="cat-dot bad-dot"></view>
+          <text class="cat-name">{{item.cat}}</text>
+          <text class="cat-count bad-count">TOP{{item.list.length}}</text>
         </view>
-        <view class="metric-cell" wx:if="{{item.has_absa}}">
-          <text class="cell-label">方面情感均值</text>
-          <text class="cell-value absa">{{item.aspect_sentiment_mean_text}}</text>
-        </view>
-        <view class="metric-cell" wx:if="{{item.has_absa}}">
-          <text class="cell-label">ABSA 正向</text>
-          <text class="cell-value pos">{{item.aspect_positive_ratio_text}}%</text>
-        </view>
-        <view class="metric-cell" wx:if="{{item.has_absa}}">
-          <text class="cell-label">ABSA 负向</text>
-          <text class="cell-value neg">{{item.aspect_negative_ratio_text}}%</text>
+        <view wx:for="{{item.list}}" wx:for-item="prod" wx:for-index="pidx"
+          wx:key="sku_id" class="card"
+          data-sku="{{prod.sku_id}}" data-tab="bad" bindtap="goDetail">
+          <view class="card-top">
+            <view class="rank-badge bad-badge">{{pidx + 1}}</view>
+            <view class="name-wrap"><text class="name">{{prod.sku_id}}</text></view>
+            <view class="ratio-badge">
+              <text class="ratio-num bad-num">{{prod.neg_text}}%</text>
+              <text class="ratio-label">差评率</text>
+            </view>
+          </view>
+          <view class="dist-bar">
+            <view class="seg seg-pos" style="width:{{prod.pos_bar+'%'}}"></view>
+            <view class="seg seg-neu" style="width:{{prod.neu_bar+'%'}}"></view>
+            <view class="seg seg-neg" style="width:{{prod.neg_bar+'%'}}"></view>
+          </view>
+          <view class="dist-numbers">
+            <text class="dn-pos">正向 {{prod.pos_text}}%</text>
+            <text class="dn-neu">中性 {{prod.neu_text}}%</text>
+            <text class="dn-neg">负向 {{prod.neg_text}}%</text>
+          </view>
+          <view class="meta-row">
+            <text class="meta-item">推荐分 {{prod.score_text}}</text>
+            <text class="meta-item">评论数 {{prod.absa_comment_count}}</text>
+            <text class="meta-item tap-tip">查看方面详情 ›</text>
+          </view>
         </view>
       </view>
+    </block>
 
-      <view class="tap-tip">查看完整分析详情 ›</view>
-    </view>
   </view>
 </view>

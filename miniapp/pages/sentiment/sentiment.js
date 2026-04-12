@@ -1,84 +1,84 @@
-const detailsData = require('../../utils/data/details');
+// pages/sentiment/sentiment.js
+const phonesData = require('../../utils/data/phones_new');
 
-function formatPercent(value) {
-  if (value === undefined || value === null || value === '') return '--';
-  const num = Number(value);
-  if (Number.isNaN(num)) return '--';
-  return (num * 100).toFixed(1);
+function fmt(v, d) {
+  if (v === undefined || v === null) return '--';
+  const n = Number(v);
+  if (isNaN(n)) return '--';
+  return n.toFixed(d === undefined ? 2 : d);
 }
 
-function formatNumber(value, digits) {
-  if (digits === undefined) digits = 2;
-  if (value === undefined || value === null || value === '') return '--';
-  const num = Number(value);
-  if (Number.isNaN(num)) return '--';
-  return num.toFixed(digits);
+function processItem(item) {
+  const pos = Number(item.aspect_positive_ratio || 0) * 100;
+  const neg = Number(item.aspect_negative_ratio || 0) * 100;
+  const neu = Math.max(0, 100 - pos - neg);
+  return {
+    ...item,
+    score_text: fmt(item.recommend_score, 1),
+    pos_bar: pos.toFixed(1), neg_bar: neg.toFixed(1), neu_bar: neu.toFixed(1),
+    pos_text: pos.toFixed(1), neg_text: neg.toFixed(1), neu_text: neu.toFixed(1),
+  };
 }
 
-function pickDisplayName(detail) {
-  if (detail.display_name) return String(detail.display_name);
-  if (detail.original_name) return String(detail.original_name);
-  return '未命名商品';
+const CAT_ORDER = ['酒店','水果','衣服','书籍','平板','洗发水','蒙牛','计算机','手机','热水器'];
+const TOP_PER_CAT = 5;
+
+// 中文品类→拼音ID映射（避免中文ID在小程序里失效）
+const CAT_ID_MAP = {
+  '酒店': 'jiudian', '水果': 'shuiguo', '衣服': 'yifu',
+  '书籍': 'shuji', '平板': 'pingban', '洗发水': 'xifashui',
+  '蒙牛': 'mengniu', '计算机': 'jisuanji', '手机': 'shouji', '热水器': 'reshuiqi'
+};
+
+function buildGroups(data, sortKey) {
+  return CAT_ORDER.map(cat => {
+    const list = data
+      .filter(i => i.cat === cat)
+      .sort((a, b) => Number(b[sortKey]) - Number(a[sortKey]))
+      .slice(0, TOP_PER_CAT)
+      .map(processItem);
+    return { cat, catId: CAT_ID_MAP[cat] || cat, list, count: list.length };
+  }).filter(g => g.count > 0);
 }
 
 Page({
   data: {
     loading: true,
-    list: []
+    activeTab: 'good',
+    selectedCat: '酒店',
+    catList: CAT_ORDER,
+    catIdMap: CAT_ID_MAP,
+    goodGroups: [],
+    badGroups: [],
   },
 
   onLoad() {
-    const result = [];
+    const goodGroups = buildGroups(phonesData, 'aspect_positive_ratio');
+    const badGroups  = buildGroups(phonesData, 'aspect_negative_ratio');
+    this.setData({ goodGroups, badGroups, loading: false });
+  },
 
-    Object.keys(detailsData).forEach((skuId) => {
-      const item = detailsData[skuId];
-      if (!item || !item.detail) return;
-      const d = item.detail;
+  switchTab(e) {
+    this.setData({ activeTab: e.currentTarget.dataset.tab, selectedCat: '酒店' });
+  },
 
-      // 情感分布条宽度（直接用百分比数值，wx:style 里填 %）
-      const posRatio  = d.pos_ratio  != null ? (d.pos_ratio  * 100) : 0;
-      const negRatio  = d.neg_ratio  != null ? (d.neg_ratio  * 100) : 0;
-      const neuRatio  = Math.max(0, 100 - posRatio - negRatio);
-
-      result.push({
-        sku_id: d.sku_id,
-        display_name_text: pickDisplayName(d),
-
-        // 右上角：百分制推荐分
-        recommend_score_text: formatNumber(d.recommend_score, 2),
-
-        // 情感指数（avg_sentiment × 100）
-        avg_sentiment_score_text: d.avg_sentiment != null
-          ? formatNumber(d.avg_sentiment * 100, 1)
-          : '--',
-
-        // 正负向文本比例
-        pos_ratio_text: formatPercent(d.pos_ratio),
-        neg_ratio_text: formatPercent(d.neg_ratio),
-        pos_bar_width:  posRatio.toFixed(1),
-        neg_bar_width:  negRatio.toFixed(1),
-        neu_bar_width:  neuRatio.toFixed(1),
-
-        // ABSA 方面级
-        has_absa: !!d.has_absa,
-        aspect_sentiment_mean_text:  formatNumber(d.aspect_sentiment_mean, 4),
-        aspect_positive_ratio_text:  formatPercent(d.aspect_positive_ratio),
-        aspect_negative_ratio_text:  formatPercent(d.aspect_negative_ratio),
-      });
+  scrollToCat(e) {
+    const cat   = e.currentTarget.dataset.cat;
+    const tab   = this.data.activeTab;
+    const catId = CAT_ID_MAP[cat] || cat;
+    this.setData({ selectedCat: cat });
+    wx.pageScrollTo({
+      selector: '#' + tab + '-' + catId,
+      duration: 300,
+      offsetTop: -180,
     });
-
-    // 按推荐分降序
-    result.sort((a, b) => {
-      const va = Number(a.recommend_score_text);
-      const vb = Number(b.recommend_score_text);
-      return (isNaN(vb) ? -999 : vb) - (isNaN(va) ? -999 : va);
-    });
-
-    this.setData({ list: result, loading: false });
   },
 
   goDetail(e) {
     const skuId = e.currentTarget.dataset.sku;
-    wx.navigateTo({ url: `/pages/detail/detail?sku_id=${skuId}` });
+    const tab   = e.currentTarget.dataset.tab;
+    wx.navigateTo({
+      url: `/pages/sentiment_detail/sentiment_detail?sku_id=${encodeURIComponent(skuId)}&tab=${tab}`
+    });
   }
 });

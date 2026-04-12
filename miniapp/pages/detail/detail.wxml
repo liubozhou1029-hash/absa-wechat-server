@@ -1,126 +1,96 @@
-<view class="page" wx:if="{{detail}}">
+<!-- pages/detail/detail.wxml -->
+<view wx:if="{{detail}}" class="page">
 
-<!-- ===== 头部：商品名 + 推荐分 ===== -->
-<view class="header-card">
-  <view class="title">{{detail.display_name_text}}</view>
-  <view class="subtitle">SKU：{{detail.sku_id}}</view>
-
-  <view class="score-row">
-    <view class="score-box primary">
-      <view class="score-label">推荐分</view>
-      <view class="score-value">{{detail.recommend_score_text}}</view>
-    </view>
-    <view class="score-box secondary" wx:if="{{has_absa}}">
-      <view class="score-label">情感基准分</view>
-      <view class="score-value">{{detail.v1_score_text}}</view>
-    </view>
-  </view>
-
-  <view class="compare-tip">分数来源：{{detail.score_source}}</view>
-</view>
-
-<!-- ===== 综合统计指标 ===== -->
-<view class="card">
-  <view class="card-title-row">
-    <text class="card-title">综合统计指标</text>
-    <view class="card-score-badge">
-      <text class="badge-label">情感指数</text>
-      <text class="badge-value">{{detail.avg_sentiment_score_text}}</text>
+  <!-- 头部 -->
+  <view class="header-card">
+    <view class="cat-badge">{{detail.cat}}</view>
+    <text class="title">{{detail.sku_id}}</text>
+    <view class="score-row">
+      <view class="score-main">
+        <text class="score-num">{{detail.score_text}}</text>
+        <text class="score-label">综合推荐分</text>
+      </view>
+      <view class="score-sub">
+        <text class="sent-num {{detail.sent_class}}">{{detail.sent_text}}</text>
+        <text class="score-label">方面情感均值</text>
+      </view>
     </view>
   </view>
-  <view class="info-row">
-    <text class="label">总评论数</text>
-    <text class="value">{{detail.total_comments_text}}</text>
-  </view>
-  <view class="info-row">
-    <text class="label">有效评论数</text>
-    <text class="value">{{detail.effective_comments_text}}</text>
-  </view>
-  <view class="info-row">
-    <text class="label">有效评论率</text>
-    <text class="value">{{detail.effective_ratio_text}}%</text>
-  </view>
-  <view class="info-row">
-    <text class="label">正向评论比例</text>
-    <text class="value pos-value">{{detail.pos_ratio_text}}%</text>
-  </view>
-  <view class="info-row">
-    <text class="label">负向评论比例</text>
-    <text class="value neg-value">{{detail.neg_ratio_text}}%</text>
-  </view>
-  <view class="info-row">
-    <text class="label">主题集中度</text>
-    <text class="value">{{detail.topic_top1_ratio_text}}%</text>
-  </view>
-  <view class="info-row">
-    <text class="label">评分归一化</text>
-    <text class="value">{{detail.avg_rating_norm_text}}</text>
-  </view>
-  <view class="info-row">
-    <text class="label">评论量因子</text>
-    <text class="value">{{detail.volume_factor_text}}</text>
-  </view>
-</view>
 
-<!-- ===== ABSA 方面级分析（仅有 ABSA 数据时展示） ===== -->
-<view class="card absa-card" wx:if="{{has_absa}}">
-  <view class="card-title-row">
-    <text class="card-title">方面级情感分析</text>
-    <text class="absa-tag">ABSA · {{detail.absa_comment_count_text}} 条</text>
-  </view>
-
-  <!-- 情感分布条 -->
-  <view class="dist-bar-wrap">
+  <!-- 情感分布 -->
+  <view class="card">
+    <view class="card-title-row">
+      <text class="card-title">情感分布</text>
+      <text class="card-tag">{{detail.absa_comment_count}} 条评论</text>
+    </view>
     <view class="dist-bar">
-      <view class="dist-seg seg-pos" style="width:{{detail.aspect_positive_ratio_text}}%"></view>
-      <view class="dist-seg seg-neu" style="width:{{detail.aspect_neutral_ratio_text}}%"></view>
-      <view class="dist-seg seg-neg" style="width:{{detail.aspect_negative_ratio_text}}%"></view>
+      <view class="seg seg-pos" style="width:{{detail.pos_bar+'%'}}"></view>
+<view class="seg seg-neu" style="width:{{detail.neu_bar+'%'}}"></view>
+<view class="seg seg-neg" style="width:{{detail.neg_bar+'%'}}"></view>
     </view>
     <view class="dist-legend">
-      <view class="legend-item"><view class="dot dot-pos"></view><text>正向 {{detail.aspect_positive_ratio_text}}%</text></view>
-      <view class="legend-item"><view class="dot dot-neu"></view><text>中性 {{detail.aspect_neutral_ratio_text}}%</text></view>
-      <view class="legend-item"><view class="dot dot-neg"></view><text>负向 {{detail.aspect_negative_ratio_text}}%</text></view>
-    </view>
-  </view>
-
-  <!-- 关键指标网格 -->
-  <view class="absa-grid">
-    <view class="absa-cell">
-      <view class="absa-cell-label">方面情感均值</view>
-      <view class="absa-cell-value highlight">{{detail.aspect_sentiment_mean_text}}</view>
-    </view>
-    <view class="absa-cell">
-      <view class="absa-cell-label">方面强度均值</view>
-      <view class="absa-cell-value">{{detail.aspect_sentiment_abs_mean_text}}</view>
-    </view>
-    <view class="absa-cell">
-      <view class="absa-cell-label">方面识别覆盖</view>
-      <view class="absa-cell-value">{{detail.aspect_known_ratio_text}}%</view>
-    </view>
-    <view class="absa-cell">
-      <view class="absa-cell-label">平均置信度</view>
-      <view class="absa-cell-value">{{detail.absa_confidence_mean_text}}</view>
-    </view>
-  </view>
-</view>
-
-<!-- ===== 主题关键词 ===== -->
-<view class="card">
-  <view class="card-title">主题关键词分析</view>
-  <view wx:if="{{topics.length === 0}}" class="empty">暂无主题数据</view>
-  <view wx:else>
-    <view class="topic-item" wx:for="{{topics}}" wx:key="topic_id">
-      <view class="topic-top">
-        <text class="topic-id">主题 {{item.topic_id}}</text>
-        <text class="topic-ratio">占比 {{item.ratio_text}}</text>
+      <view class="leg-item">
+        <view class="dot dot-pos"></view>
+        <text>正向 {{detail.pos_text}}%</text>
       </view>
-      <view class="topic-keywords">{{item.keywords}}</view>
+      <view class="leg-item">
+        <view class="dot dot-neu"></view>
+        <text class="neu">中性 {{detail.neu_text}}%</text>
+      </view>
+      <view class="leg-item">
+        <view class="dot dot-neg"></view>
+        <text class="neg">负向 {{detail.neg_text}}%</text>
+      </view>
+    </view>
+
+    <!-- 指标网格 -->
+    <view class="metrics-grid">
+      <view class="metric-cell">
+        <text class="cell-label">方面情感均值</text>
+        <text class="cell-value {{detail.sent_class}}">{{detail.sent_text}}</text>
+      </view>
+      <view class="metric-cell">
+        <text class="cell-label">方面强度均值</text>
+        <text class="cell-value">{{detail.abs_text}}</text>
+      </view>
+      <view class="metric-cell">
+        <text class="cell-label">平均置信度</text>
+        <text class="cell-value">{{detail.conf_text}}</text>
+      </view>
+      <view class="metric-cell">
+        <text class="cell-label">方面覆盖率</text>
+        <text class="cell-value">{{detail.known_text}}%</text>
+      </view>
     </view>
   </view>
-</view>
+
+  <!-- 方面情感详情 -->
+  <view class="card">
+    <view class="card-title-row">
+      <text class="card-title">各方面情感详情</text>
+    </view>
+    <view wx:if="{{aspects.length === 0}}" class="empty">暂无方面数据</view>
+    <view wx:else>
+      <view wx:for="{{aspects}}" wx:key="aspect" class="aspect-row">
+        <view class="aspect-left">
+          <text class="aspect-name">{{item.aspect}}</text>
+          <text class="aspect-count">{{item.aspect_count}}条</text>
+        </view>
+        <view class="aspect-bar-wrap">
+          <view class="aspect-bar">
+            <view
+              class="aspect-fill {{item.sent_class}}"
+              style="width:{{item.bar_width+'%'}}"
+            ></view>
+          </view>
+        </view>
+        <text class="aspect-score {{item.sent_class}}">{{item.sent_text}}</text>
+      </view>
+    </view>
+  </view>
 
 </view>
 
 <view wx:else class="page">
-<view class="empty">未找到详情数据</view>
+  <view class="empty-page">未找到商品数据</view>
 </view>
