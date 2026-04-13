@@ -235,20 +235,36 @@ def recommend():
         if not reviews or len(reviews) == 0:
             return jsonify({"code": 400, "message": "请至少输入一条评论"}), 400
 
-            # 暂存用户提交数据
-            from datetime import datetime
-            log_entry = {
-                "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "reviews": reviews,
-                "user_category": detect_user_category(reviews),
-            }
-            log_file = BASE_DIR / "backend" / "data" / "user_submissions.json"
-            try:
-                existing = json.loads(log_file.read_text(encoding="utf-8")) if log_file.exists() else []
-                existing.append(log_entry)
-                log_file.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
-            except Exception:
-                pass
+        from datetime import datetime
+        import json
+        from pathlib import Path
+        import os
+
+        CURRENT_FILE = Path(__file__).resolve()
+        BACKEND_DIR = CURRENT_FILE.parents[2]
+
+        log_entry = {
+            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "reviews": reviews,
+            "user_category": detect_user_category(reviews),
+        }
+
+        log_file = BACKEND_DIR / "data" / "user_submit" / "user_submissions.jsonl"
+
+        try:
+            log_file.parent.mkdir(parents=True, exist_ok=True)
+
+            print("📁 当前工作目录:", os.getcwd())
+            print("📁 backend目录:", BACKEND_DIR)
+            print("📁 实际保存路径:", log_file)
+
+            with open(log_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+
+            print("✅ 用户数据保存成功(JSONL)")
+
+        except Exception as e:
+            print("❌ 保存失败：", e)
 
         # 提取用户偏好
         user_pref = extract_user_preference(reviews)

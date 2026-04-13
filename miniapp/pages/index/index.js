@@ -1,26 +1,15 @@
 // pages/index/index.js
 Page({
   goRecommend() {
-    wx.navigateTo({
-      url: '/pages/recommend/recommend'
-    });
+    wx.navigateTo({ url: '/pages/recommend/recommend' });
   },
-
   goData() {
-    wx.navigateTo({
-      url: '/pages/phones/phones'
-    });
+    wx.navigateTo({ url: '/pages/phones/phones' });
   },
-
   goEmotion() {
-    wx.navigateTo({
-      url: '/pages/sentiment/sentiment'
-    });
+    wx.navigateTo({ url: '/pages/sentiment/sentiment' });
   },
-
-  goTopic() {
-    wx.navigateTo({
-      url: '/pages/topic/topic'
-    });
+  goProfile() {
+    wx.navigateTo({ url: '/pages/profile/profile' });
   }
 });

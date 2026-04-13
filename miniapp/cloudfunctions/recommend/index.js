@@ -3,7 +3,7 @@ const axios = require('axios')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 // ⚠️ 每次cpolar重启后这里的URL会变，需要更新
-const FLASK_URL = 'https://1a5a5086.r28.cpolar.top'
+const FLASK_URL = 'http://3dc72b89.r28.cpolar.top'
 
 exports.main = async (event, context) => {
   try {

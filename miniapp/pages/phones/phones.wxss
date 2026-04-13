@@ -97,7 +97,7 @@
 /* 品类筛选器 */
 .cat-filter {
   position: sticky;
-  top: 0;
+  top: 88rpx;  /* 搜索框高度 */
   z-index: 100;
   white-space: nowrap;
   background: #fff;
@@ -119,3 +119,120 @@
 }
 
 
+
+/* ── 搜索框 ── */
+.search-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 101;  /* 比cat-filter高 */
+  background: #fff;
+  padding: 16rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f6fa;
+  border-radius: 40rpx;
+  padding: 12rpx 20rpx;
+  gap: 10rpx;
+}
+.search-icon { font-size: 28rpx; }
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  background: transparent;
+}
+.search-clear {
+  font-size: 28rpx;
+  color: #aaa;
+  padding: 0 6rpx;
+}
+.search-result-tip {
+  font-size: 24rpx;
+  color: #aaa;
+  padding: 12rpx 24rpx 4rpx;
+}
+.empty-box { padding: 60rpx; text-align: center; }
+.empty-text { font-size: 28rpx; color: #aaa; }
+.cat-tag-sm {
+  display: inline-block;
+  font-size: 20rpx;
+  color: #7c4dff;
+  background: #f0f0ff;
+  padding: 3rpx 10rpx;
+  border-radius: 8rpx;
+  margin-top: 4rpx;
+}
+
+/* ── 品类好评率概览图 ── */
+.chart-card {
+  margin: 16rpx 20rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
+}
+.chart-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 20rpx;
+}
+.chart-list { display: flex; flex-direction: column; gap: 14rpx; }
+.chart-row { display: flex; align-items: center; gap: 12rpx; }
+.chart-cat {
+  width: 80rpx;
+  font-size: 24rpx;
+  color: #555;
+  flex-shrink: 0;
+  text-align: right;
+}
+.chart-bar-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+.chart-bar-bg {
+  flex: 1;
+  height: 20rpx;
+  background: #f0f0f0;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+.chart-bar-fill {
+  height: 100%;
+  border-radius: 10rpx;
+  background: linear-gradient(90deg, #4a9eff, #7c4dff);
+  transition: width 0.5s;
+}
+.chart-val {
+  width: 70rpx;
+  font-size: 24rpx;
+  color: #666;
+  text-align: right;
+  flex-shrink: 0;
+}
+.chart-val-high { color: #16a34a; font-weight: 700; }
+
+/* 分享按钮（recommend页用）*/
+.share-btn {
+  margin: 0 20rpx 16rpx;
+  background: linear-gradient(135deg, #4a9eff, #7c4dff);
+  color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+}
+.share-btn::after { border: none; }
+.share-icon { font-size: 32rpx; }
+.share-text { font-size: 28rpx; color: #fff; }

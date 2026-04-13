@@ -1,13 +1,11 @@
 <!-- pages/recommend/recommend.wxml -->
 <view class="container">
 
-  <!-- ── 顶部标题 ── -->
   <view class="header">
     <text class="title">智能商品推荐</text>
     <text class="subtitle">输入您的评论，获取个性化推荐</text>
   </view>
 
-  <!-- ── 输入区 ── -->
   <view class="input-card">
     <view class="input-label">
       <text class="label-text">输入您的评论</text>
@@ -27,7 +25,6 @@
     </view>
   </view>
 
-  <!-- ── 数量选择 ── -->
   <view class="option-row">
     <text class="option-label">推荐数量</text>
     <view class="topk-btns">
@@ -41,7 +38,6 @@
     </view>
   </view>
 
-  <!-- ── 提交按钮 ── -->
   <view class="submit-btn {{loading ? 'disabled' : ''}}" bindtap="submit">
     <text wx:if="{{!loading}}">开始分析并推荐</text>
     <view wx:else class="loading-row">
@@ -54,7 +50,6 @@
     </view>
   </view>
 
-  <!-- ── 结果区 ── -->
   <block wx:if="{{hasResult}}">
 
     <!-- 用户偏好 -->
@@ -104,10 +99,16 @@
             <text class="tag tag-pos">好评率 {{item.pos_ratio_text}}%</text>
             <text class="tag tag-count">{{item.comment_count}}条评论</text>
           </view>
+          <!-- 匹配方面说明 -->
+          <view wx:if="{{item.match_aspect}}" class="match-tip">
+            <text class="match-icon">✓</text>
+            <text class="match-text">您关注{{item.match_aspect}}，该商品此方面好评率{{item.match_ratio}}%</text>
+          </view>
         </view>
-        <view class="rec-score">
+        <view class="rec-score-wrap">
           <text class="score-num">{{item.score}}</text>
           <text class="score-label">推荐分</text>
+          <text class="detail-hint">查看详情 ›</text>
         </view>
       </view>
     </view>
@@ -136,12 +137,29 @@
             <text class="tag tag-pos">好评率 {{item.pos_ratio_text}}%</text>
             <text class="tag tag-count">{{item.comment_count}}条评论</text>
           </view>
+          <view wx:if="{{item.match_aspect}}" class="match-tip">
+            <text class="match-icon">✓</text>
+            <text class="match-text">您关注{{item.match_aspect}}，该商品此方面好评率{{item.match_ratio}}%</text>
+          </view>
         </view>
-        <view class="rec-score">
+        <view class="rec-score-wrap">
           <text class="score-num">{{item.score}}</text>
           <text class="score-label">推荐分</text>
+          <text class="detail-hint">查看详情 ›</text>
         </view>
       </view>
+    </view>
+
+
+    <!-- 分享按钮 -->
+    <button class="share-btn" open-type="share">
+      <text class="share-icon">📤</text>
+      <text class="share-text">分享推荐结果给朋友</text>
+    </button>
+
+    <!-- 重新推荐按钮 -->
+    <view class="retry-btn" bindtap="retry">
+      <text>✏️ 修改评论重新推荐</text>
     </view>
 
   </block>

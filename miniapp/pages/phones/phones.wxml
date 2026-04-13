@@ -6,8 +6,23 @@
     <text class="page-subtitle">各品类综合推荐分TOP20，共10个品类</text>
   </view>
 
-  <!-- 品类快速跳转 -->
-  <scroll-view class="cat-filter" scroll-x>
+  <!-- 搜索框 -->
+  <view class="search-wrap">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索商品名称..."
+        value="{{searchText}}"
+        bindinput="onSearch"
+        confirm-type="search"
+      />
+      <view wx:if="{{searchText}}" class="search-clear" bindtap="clearSearch">✕</view>
+    </view>
+  </view>
+
+  <!-- 品类快速跳转（搜索时隐藏）-->
+  <scroll-view wx:if="{{!searchText}}" class="cat-filter" scroll-x>
     <view
       wx:for="{{catList}}"
       wx:key="*this"
@@ -17,9 +32,65 @@
     >{{item}}</view>
   </scroll-view>
 
+  <!-- 品类好评率概览图（搜索时隐藏）-->
+  <view wx:if="{{!searchText}}" class="chart-card">
+    <text class="chart-title">📈 各品类好评率概览</text>
+    <view class="chart-list">
+      <view wx:for="{{chartData}}" wx:key="cat" class="chart-row">
+        <text class="chart-cat">{{item.cat}}</text>
+        <view class="chart-bar-wrap">
+          <view class="chart-bar-bg">
+            <view class="chart-bar-fill" style="width:{{item.pos_bar+'%'}}"></view>
+          </view>
+          <text class="chart-val {{item.pos_rate >= 80 ? 'chart-val-high' : ''}}">{{item.pos_rate}}%</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <view wx:if="{{loading}}" class="loading-box">
     <text class="loading-text">加载中...</text>
   </view>
+
+  <block wx:elif="{{searchText}}">
+    <!-- 搜索结果 -->
+    <view wx:if="{{searchResults.length === 0}}" class="empty-box">
+      <text class="empty-text">未找到"{{searchText}}"相关商品</text>
+    </view>
+    <view wx:else class="search-result-tip">找到 {{searchResults.length}} 个相关商品</view>
+    <view
+      wx:for="{{searchResults}}"
+      wx:key="sku_id"
+      class="rec-card"
+      bindtap="goDetail"
+      data-sku="{{item.sku_id}}"
+    >
+      <view class="card-top">
+        <view class="rank-badge">{{index+1}}</view>
+        <view class="name-block">
+          <text class="name">{{item.sku_id}}</text>
+          <view class="cat-tag-sm">{{item.cat}}</view>
+        </view>
+        <view class="score-block">
+          <text class="score-num">{{item.score_text}}</text>
+          <text class="score-label">推荐分</text>
+        </view>
+      </view>
+      <view class="reason-box">
+        <text class="reason-text">{{item.reason}}</text>
+      </view>
+      <view class="dist-bar">
+        <view class="seg seg-pos" style="width:{{item.pos_bar+'%'}}"></view>
+        <view class="seg seg-neu" style="width:{{item.neu_bar+'%'}}"></view>
+        <view class="seg seg-neg" style="width:{{item.neg_bar+'%'}}"></view>
+      </view>
+      <view class="dist-legend">
+        <text class="leg pos-text">正向 {{item.pos_text}}%</text>
+        <text class="leg neu-text">中性 {{item.neu_text}}%</text>
+        <text class="leg neg-text">负向 {{item.neg_text}}%</text>
+      </view>
+    </view>
+  </block>
 
   <block wx:else>
     <view
@@ -42,7 +113,6 @@
         class="rec-card"
         bindtap="goDetail"
         data-sku="{{product.sku_id}}"
-        data-cat="{{item.cat}}"
       >
         <view class="card-top">
           <view class="rank-badge">{{product.rank}}</view>
@@ -54,12 +124,9 @@
             <text class="score-label">推荐分</text>
           </view>
         </view>
-
-        <!-- 推荐理由 -->
         <view class="reason-box">
           <text class="reason-text">{{product.reason}}</text>
         </view>
-
         <view class="dist-bar">
           <view class="seg seg-pos" style="width:{{product.pos_bar+'%'}}"></view>
           <view class="seg seg-neu" style="width:{{product.neu_bar+'%'}}"></view>
@@ -70,7 +137,6 @@
           <text class="leg neu-text">中性 {{product.neu_text}}%</text>
           <text class="leg neg-text">负向 {{product.neg_text}}%</text>
         </view>
-
         <view class="meta-row">
           <text class="meta-item">评论数 {{product.absa_comment_count}}</text>
           <text class="meta-item">置信度 {{product.conf_text}}</text>
@@ -82,5 +148,3 @@
   </block>
 
 </view>
-
-

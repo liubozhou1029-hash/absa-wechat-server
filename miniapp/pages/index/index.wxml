@@ -1,55 +1,82 @@
 <!-- pages/index/index.wxml -->
 <view class="page">
 
+  <!-- 顶部 hero -->
   <view class="hero-section">
-    <text class="hero-title">评论数据分析工具</text>
-    <text class="hero-subtitle">基于评论文本的情感分析与主题关键词统计</text>
-  </view>
-
-  <view class="panel-section">
-    <text class="section-title">功能入口</text>
-
-    <!-- 智能推荐（新增核心功能） -->
-    <view class="entry-card recommend-card" bindtap="goRecommend">
-      <view class="entry-left">
-        <text class="entry-title">🎯 智能推荐</text>
-        <text class="entry-desc">输入您的评论，获取个性化跨品类商品推荐</text>
+    <view class="hero-top">
+      <view class="hero-text">
+        <text class="hero-title">商品智能推荐</text>
+        <text class="hero-subtitle">基于ABSA方面情感分析的跨品类推荐系统</text>
       </view>
-      <text class="entry-right">›</text>
+      <view class="avatar-btn" bindtap="goProfile">
+        <text class="avatar-icon">👤</text>
+        <text class="avatar-label">我的</text>
+      </view>
     </view>
 
-    <!-- 数据分析 -->
+    <!-- 数据概览卡片 -->
+    <view class="stats-row">
+      <view class="stat-item">
+        <text class="stat-num">10</text>
+        <text class="stat-label">商品品类</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">3276</text>
+        <text class="stat-label">收录商品</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">18566</text>
+        <text class="stat-label">真实评论</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">29550</text>
+        <text class="stat-label">方面分析</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 智能推荐大卡片 -->
+  <view class="recommend-hero-card" bindtap="goRecommend">
+    <view class="rec-hero-left">
+      <view class="rec-hero-icon">🎯</view>
+      <view>
+        <text class="rec-hero-title">智能推荐</text>
+        <text class="rec-hero-desc">输入您的评论，我们的模型将分析您的偏好</text>
+        <text class="rec-hero-desc">为您匹配最适合的商品</text>
+      </view>
+    </view>
+    <view class="rec-hero-btn">
+      <text class="rec-hero-btn-text">立即体验</text>
+      <text class="rec-hero-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 分隔提示 -->
+  <view class="divider-section">
+    <view class="divider-line"></view>
+    <text class="divider-text">想了解我们更多的数据？</text>
+    <view class="divider-line"></view>
+  </view>
+
+  <!-- 数据展示入口 -->
+  <view class="data-section">
     <view class="entry-card data-card" bindtap="goData">
       <view class="entry-left">
-        <text class="entry-title">数据分析</text>
-        <text class="entry-desc">查看评论文本的综合分析信息，包括情感指数、情感均值及有效文本统计。</text>
+        <text class="entry-title">📊 最值得推荐</text>
+        <text class="entry-desc">按综合评分排列，各品类Top商品一览</text>
       </view>
       <text class="entry-right">›</text>
     </view>
-
-    <!-- 情感统计 -->
     <view class="entry-card emotion-card" bindtap="goEmotion">
       <view class="entry-left">
-        <text class="entry-title">情感统计</text>
-        <text class="entry-desc">查看评论文本的正向比例、负向比例及情感均值等情感分析指标。</text>
+        <text class="entry-title">💚 情感排行榜</text>
+        <text class="entry-desc">好评榜与差评榜，各品类情感分布排行</text>
       </view>
       <text class="entry-right">›</text>
     </view>
-
-    <!-- 主题关键词 -->
-    <view class="entry-card topic-card" bindtap="goTopic">
-      <view class="entry-left">
-        <text class="entry-title">主题关键词</text>
-        <text class="entry-desc">查看评论文本本题类后的主题集中度与核心关键词信息。</text>
-      </view>
-      <text class="entry-right">›</text>
-    </view>
-
-  </view>
-
-  <view class="info-card">
-    <text class="info-title">工具说明</text>
-    <text class="info-text">本工具用于展示评论文本分析结果，主要包括情感分析、文本统计与主题关键词提取等内容，适用于数据分析学习与研究场景。</text>
   </view>
 
 </view>

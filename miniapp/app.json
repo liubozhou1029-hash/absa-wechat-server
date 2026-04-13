@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/recommend/recommend",
+    "pages/profile/profile",
     "pages/phones/phones",
     "pages/sentiment/sentiment",
     "pages/sentiment_detail/sentiment_detail",
